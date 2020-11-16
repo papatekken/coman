@@ -1,0 +1,12 @@
+//- show when user not login yet
+extends layout
+
+block variables
+	- var title = "Unauthenticated"
+	- var containerClasses = ['h-100', 'row', 'align-items-center']
+block content
+
+	div.containerClasses
+		div.searchbox
+			h4.text-center.
+				#{__('You must be signed in to view this page. Please')} #[a(href="/users/login", title="Login") #{__('login')}] #{__('first')}

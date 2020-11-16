@@ -1,0 +1,28 @@
+//- page to edit medicine
+extends layout
+
+block variables
+	- var containerClasses = ['h-100', 'row', 'align-items-center']
+block content
+	
+	div.containerClasses
+		h3 Medicine Maintenance
+		form(method='POST' action='')
+		if medicineList
+			- var n = 0;
+				
+				dl
+						each medicine in medicineList
+							dt 
+							dd 
+								input(type='text' name='name#{n}' value=medicine.name)
+								input(type='text' name='defaultunit#{n}' value=medicine.defaultUnit)
+							- n++
+							
+		button.btn.btn-primary(type='submit') Submit							
+				if errors 
+					ul
+					for error in errors
+						li!= error.msg
+		
+	

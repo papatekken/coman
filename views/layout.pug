@@ -1,0 +1,36 @@
+//- shared layout base for different page
+block variables
+
+doctype html
+html(lang="en")
+	head
+		meta(charset="utf-8")
+		meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+		link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
+		link(rel="stylesheet", href="/stylesheets/style.css")
+		script(src="/javascripts/commonForm.js")
+		title okta-express-login-portal: #{title}
+	body
+		div.top-bar.d-flex.flex-column.flex-md-row.align-items-center.p-3.px-md-4.mb-3.box-shadow.header
+			h6.my-0.mr-md-auto.font-weight-heavy.sitetitle
+				span.small.border.border-danger.p-2
+					a.sitetitle(href="/", title="Consultation Management System") COMANS
+				span.sitetitle.p-2
+					| #{process.env.CLIENTNAME}
+			nav.my-2.my-md-0.mr-md-3
+			if user == undefined
+				a.p-2.text-dark(href="/users/login" title="System Login") #{__('LogIn')}
+			else
+				a.p-2.text-dark(href="/", title="Patient Search") #{__('Search')}
+				a.p-2.text-dark(href="/setting" title="Setting") #{__('Setting')}
+				a.p-2.text-dark(href="/users/logout" title="System Logout") #{__('Logout')}
+			a.p-2.text-dark(href="?lng=en" title="English") Eng
+			a.p-2.text-dark(href="?lng=zh" title="中文") 中
+		.container
+
+			block content
+		|
+		|
+	footer.
+		
+		Version #{process.env.npm_package_version}

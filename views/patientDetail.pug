@@ -1,0 +1,96 @@
+//- page to edit patient and show list of relevant consultation 
+extends layout
+
+block variables
+	- var containerClasses = ['h-100', 'row', 'align-items-center']
+	- var title =''
+	if (outTitle == 0)
+		- var title = __('Add new Patient')
+	else
+		- var title = __('Patient ID.') + outTitle
+block content
+	div.container
+		div.containerClasses
+			h4 #{title} 
+			ul#errmsg
+				if errors 
+					for error in errors
+						li.alert-danger!= error.msg			
+			br
+			form(method='POST' action='')
+				input#pid.form-control(type="hidden", name="pid", value=(undefined===patient ? '' : patient.pid))
+				div.row
+					div.col-md-6
+						div.row
+							div.col-md-6.mb-2
+								label(for='cname') #{__('Chinese Name')}:
+								input#cname.form-control(type='text', placeholder=__('Chinese Name') name='cname'  value=(undefined===patient ? '' : patient.cName) )
+								
+							div.col-md-6.mb-2
+								label(for='ename') #{__('English Name')}:
+								input#ename.form-control(type='text', placeholder= __('English Name') name='ename'  value=(undefined===patient ? '' : patient.eName))
+						div.row
+							div.col-md-6.mb-2
+								label(for='idDocNo') #{__('Identity document number')}:
+								input#idDocNo.form-control(type='text', placeholder=__('Identity document number') name='idDocNo'  value=(undefined===patient ? '' : patient.idDocNo) )
+							div.col-md-6.mb-2
+								label(for='gender') #{__('Gender')}:
+								BR
+								input#genderM(type='radio', name='gender', value='M', checked=(undefined===patient ? 1!=1 : patient.gender=='M'))
+								|&nbsp;#{__('Male')}&nbsp;&nbsp;&nbsp;
+								
+								input#genderF(type='radio', name='gender', value='F', checked=(undefined===patient ? 1!=1 : patient.gender=='F'))
+								|&nbsp;#{__('Female')}&nbsp;&nbsp;&nbsp;
+								
+								input#genderN(type='radio', name='gender', value='',  checked=(undefined===patient ? 1!=1 : patient.gender!='M' && patient.gender!='F'))
+								|&nbsp;#{__('N/A')}
+						div.row
+							div.col-md-6.mb-2
+								label(for='phone') #{__('Phone No.')}:
+								input#phone.form-control(type='text', placeholder=__('Phone No.') name='phone'  value=(undefined===patient ? '' : patient.phone) )
+							div.col-md-6.mb-2
+								label(for='email') #{__('Email')}:
+								input#email.form-control(type='text', placeholder=__('Email address') name='email' value=(undefined===patient ? '' : patient.email))
+						div.row
+							div.col-md-6.mb-2
+								label(for='dob') #{__('Date Of Birth')}:
+								input#dob.form-control(type='Date', name='dob'  value=(undefined===patient ? '' : (isNaN(patient.dob)||patient.dob===null||patient.dob==''?'':new Date(patient.dob).toISOString().slice(0,10))) onchange='ageUpdate()')
+							div.col-md-6.mb-2
+								label(for='age') #{__('Age')}:
+								input#age.form-control(type='number', placeholder=__('Age') name='age'  value=(undefined===patient ? '' : patient.age)   max=150 onchange='DOBClear()')
+						div.row
+							div.col-md-12.mb-2
+								label(for='address') #{__('Address')}:
+								input#address.form-control(type='text', placeholder=__('Address') name='address'  value=(undefined===patient ? '' : patient.address))
+						div.row
+							div.col-md-6.mb-2
+								label(for='referral') #{__('Referral')}:
+								input#referral.form-control(type='text', placeholder=__('Referral') name='referral'  value=(undefined===patient ? '' : patient.referral))
+								
+							div.col-md-6.mb-2
+								label(for='occupation') #{__('Occupation')}:
+								input#occupation.form-control(type='text', placeholder=__('Occupation') name='occupation'  value=(undefined===patient ? '' : patient.occupation))
+						div.row
+							div.col-md-12.mb-4
+								label(for='remarks') #{__('Remarks')}:
+								input#remarks.form-control(type='text', placeholder=__('Remarks') name='remarks'  value=(undefined===patient ? '' : patient.remarks))
+								
+						button.btn.btn-primary(type='submit') #{__('Submit')}
+					div.col-md-6
+						if(undefined!==patient)
+							if consultationList
+								p #{consultationList.length} #{__('consultation found')} 
+							else
+								p 0 #{__('consultation found')}
+						if(undefined!==patient)								
+							a(href='/consultation/add/'+patient._id)
+								div.entityadd
+									h4 #{__('Click here to add new consultation')}
+							if consultationList
+								each consultation in consultationList
+									a(href='/consultation/'+consultation._id)
+										div.entity
+											- var cDate = new Date(consultation.datetimeConsult);
+											h6 [#{consultation.cid}]#{cDate.toISOString().slice(0,10)} #{('0'+cDate.getHours()).slice(-2)} : #{('0'+cDate.getMinutes()).slice(-2)}
+											h5 #{consultation.chiefComplaint}
+											h5 #{consultation.symptom}

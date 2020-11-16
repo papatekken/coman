@@ -1,0 +1,118 @@
+//- page to edit consultation and related prescription
+extends layout
+
+block variables
+	- var containerClasses = ['h-100', 'row', 'align-items-center']
+	- var title =''
+	if (outTitle == 0)
+		- var title = __('Add new Consultation')
+	else
+		- var title = __('Consultation ID.') + outTitle	
+	- var medicineList = [];
+	if medicine
+		each medicineItem in medicine
+			- medicineList.push({name:medicineItem.name,unit:medicineItem.defaultUnit})
+	
+	- var formDate = new Date().toISOString().split('T')[0];
+	if(!(undefined===consultation))
+		if(typeof consultation.dateConsult!=="undefined")
+			- formDate=consultation.dateConsult
+		else if(!(consultation.datetimeConsult!=="undefined"||consultation.datetimeConsult===null||consultation.datetimeConsult==''))
+			- formDate=new Date(consultation.datetimeConsult).toISOString().slice(0,10)
+			
+	- var formHour =('0'+new Date().getHours()).slice(-2) ;
+	if(!(undefined===consultation))
+		if(typeof consultation.hourConsult!=="undefined")
+			- formHour=consultation.hourConsult
+		else if(!(consultation.datetimeConsult!=="undefined"||consultation.datetimeConsult===null||consultation.datetimeConsult==''))
+			- formHour=('0'+new Date(consultation.datetimeConsult).getHours()).slice(-2)				
+
+	- var formMinute =('0'+new Date().getMinutes()).slice(-2) ;
+	if(!(undefined===consultation))
+		if(typeof consultation.minuteConsult!=="undefined")
+			- formMinute=consultation.minuteConsult
+		else if(!(consultation.datetimeConsult!=="undefined"||consultation.datetimeConsult===null||consultation.datetimeConsult==''))
+			- formMinute=('0'+new Date(consultation.datetimeConsult).getMinutes()).slice(-2)
+	- var mediSelected='[]';
+	if(!(undefined===prescription))
+		- var mediSelected= prescription;
+	
+block content
+	div.containerClasses
+		h3 #{title}
+		ul#errmsg
+			if errors 
+				for error in errors
+					li.alert-danger!= error.msg					
+		form(method='POST' action='')
+			input#cid.form-control(type="hidden", name="cid", value=(undefined===consultation ? '' : consultation.cid))
+			input#pid.form-control(type="hidden", name="patientid", value=(undefined===consultation ? '' : consultation.patientid))
+			input#prescription.form-control(type="hidden", name="prescription", value='')
+			div.row
+				div.col-md-6
+					div.row
+						div.col-md-12 #{__('Consulation Date')}:
+					div.row
+						div.col-md-6.mb-3
+							input#dateConsult.form-control(type='Date', name='dateConsult', value=formDate)
+						div.col-md-3.mb-3
+							select#hourConsult.form-control(name='hourConsult')
+								- var hour = 0;
+								- var selectedhour = formHour
+								while hour<24
+									- var displayhour = ('0' + hour).slice(-2) 
+									option(value=displayhour, selected=(selectedhour == displayhour)) #{displayhour} 
+									-- hour++
+						div.col-md-3.mb-3
+							select#minuteConsult.form-control(name='minuteConsult')
+								- var min = 0;
+								- var selectedmin = formMinute
+								while min<60
+									- var displaymin = ('0' + min).slice(-2)
+									option(value=displaymin,selected=(selectedmin == displaymin)) #{displaymin}
+									-- min++
+					div.row
+						div.col-md-12.mb-2
+							label(for='chiefComplaint') #{__('Chief Complaint')}:
+							input#chiefComplaint.form-control(type='text', placeholder=__('Chief Complaint') name='chiefComplaint'  value=(undefined===consultation ? '' : consultation.chiefComplaint))
+
+					div.row
+						div.col-md-12.mb-2
+							label(for='symptom') #{__('Symptom')}:
+							input#symptom.form-control(type='text', placeholder=__('Symptom') name='symptom'  value=(undefined===consultation ? '' : consultation.symptom))
+					div.form-group
+
+						label(for='amount') #{__('Charge Amount')}:
+						input#ename.form-control(type='number', placeholder=__('Charge Amount') name='amount' required='true' value=(undefined===consultation ? 0: consultation.amount) )
+					div.form-group
+						label(for='remarks') #{__('Remarks')}:
+						input#ename.form-control(type='text', placeholder=__('Remarks') name='remarks'  value=(undefined===consultation ? '': consultation.remarks) )
+						
+					button.btn.btn-primary(type='submit') #{__('Submit')}
+				div.col-md-6
+					p(style='text-decoration:underline') #{__('Prescription')}
+					div#mediTable.containerClasses
+					hr
+					div.row
+						div.col-md-4
+							select#medicineAdd.form-control(name='medicineAdd')
+								- var counter =0
+								while (counter < medicineList.length)
+									option(value=medicineList[counter].name) #{medicineList[counter].name}[#{medicineList[counter].unit}]
+									- counter++
+						div.col-md-2
+							label(for='medicineQtyAdd') #{__('Quantity')}:
+						div.col-md-2
+							input#medicineQtyAdd.form-control(type='number', placeholder=__('Quantity') name='medicineQtyAdd' value=0 )
+						div.col-md-2
+							button.form-control(onclick='medAdd()') +
+		if((undefined===dataSource))
+			script.
+				var mediSelected=#{mediSelected};
+				var label1 = "#{__('Remove')}";
+				medInit();					
+		else	
+			script.
+				var mediSelected=JSON.parse('#{mediSelected}'.replace(/&quot;/g, '\"'));
+				var label1 = "#{__('Remove')}";
+				medInit();							

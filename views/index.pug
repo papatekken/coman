@@ -1,0 +1,51 @@
+//- default page after login, which can search patient record
+extends layout
+
+block variables
+	- var containerClasses = ['h-100', 'row', 'align-items-center']
+block content
+	div.container
+		div.containerClasses
+			div.searchbox
+				h4 #{__('Patient Search')} (#{__('Total Patient')}:#{data.patient_count})
+				form(name='agreement',action='/patient/search', method='GET')
+					include components/patient_search.pug
+		
+				if action
+					if data.patientList
+						br
+						| #{data.patientList.length} #{__('records found for')} "#{findString}"			
+					else
+						br
+						| 0 #{__('records found for')} "#{findString}"					
+				ul(style={width:'100%'})
+					if data.patientList		
+						each patient in data.patientList
+							ui
+								a(href=patient._id) 
+									- var displayinfo = __('none')
+									- if(patient.LastConsultation.length >=1){
+									-	cDate = patient.LastConsultation[0].datetimeConsult;
+									-	displayinfo = cDate.getFullYear()+'-'+('0'+(cDate.getMonth()+1)).slice(-2)+'-'+('0'+(cDate.getDate())).slice(-2)+' '+('0'+(cDate.getHours())).slice(-2)+':'+('0'+(cDate.getMinutes())).slice(-2);
+									- }
+									div.entity
+										- var pname= patient.cName +(patient.eName!=''?"("+patient.eName+")":"")
+										div.row
+											div.col-12.mb-2.font-weight-bold|#{patient.pid} #{pname}
+										div.row
+											div.col-3.mb-2|#{__('Gender')}: #{patient.gender }
+											div.col-3.mb-2|#{__('Occupation')}: #{patient.occupation}
+											div.col-6.mb-2|#{__('Referral')}: #{patient.referral}
+										div.row
+											div.col-3.mb-2|#{__('Phone')}: #{patient.phone }
+											div.col-9.mb-2|#{__('Number of Consultation')}: #{patient.consultationCount}
+										div.row
+											div.col-12.mb-4|#{__('Last Consulation')}: #{displayinfo}
+					ui
+						a(href='/patient/add')
+							div.entityadd
+								h4 #{__('Click here to add new patient')}											
+										
+
+	  
+

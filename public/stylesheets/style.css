@@ -1,0 +1,86 @@
+body {
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	background-color:#f8f9fa
+}
+
+a:link {text-decoration: none;}
+a:visited {text-decoration: none;}
+a:hover {text-decoration: none;}
+a:active {text-decoration: none;}
+
+footer{
+	
+    bottom:0%;
+    width:100%; 
+	height:20px;
+    
+	
+}
+
+
+.maincontain{
+	position: relative;
+}
+
+.searchbox{
+	
+	margin: auto; 
+	width:100%;
+	top: 20%;
+	text-align:center
+	
+}
+
+.header{
+	//position: fixed; 
+	width:100%;
+	border-bottom: 5px solid #2a7fba;
+	background-color: #fff;
+}
+
+.sitetitle{
+	font-weight: 800;color:#b21c1c;
+}
+
+.entityadd{
+	border: 4px dotted #2a7fba;
+	margin: auto; 
+	margin-top: 20px;
+	min-height:100px;
+	padding: 2px 2px 2px 2px;	
+	background-color: #dddddd;
+	justify-content: center;
+	display: flex;
+	align-items: center;
+}
+
+.entity{
+	border: 4px solid #2a7fba;
+	margin: auto; 
+	margin-top: 20px;
+	min-height:100px;
+	padding: 2px 2px 2px 2px;
+	background-color: #fff;
+	text-align:left;
+}
+
+.container {
+    max-width: 1024px;
+}
+.form-control {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+#errmsg{
+	 opacity: 0;
+}
