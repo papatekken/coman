@@ -5,6 +5,7 @@
 [![ExpressJS](https://img.shields.io/badge/expressJS-4.16.1-blue)](https://expressjs.com/)
 [![MongoDB](https://img.shields.io/badge/mongonese-5.10.6-blue)](https://www.npmjs.com/package/mongoose)
 
+* Development in progress *
 A clinic management system which was developed in Express.js with mongonese database
 
 
@@ -52,7 +53,7 @@ In current version, all CRUD operation are ready with some basic features, but I
 - edit page for preset formula, which can be applied in prescription as predefined medicine selection
 
 ## License
-[GNU AGPLv3](https://github.com/papatekken/coman/LICENSE)
+[GNU AGPLv3](https://github.com/papatekken/coman/blob/main/LICENSE)
 
 ## Contact
 Created by [@papatekken](papatekken@gmail.com) - feel free to contact me!
